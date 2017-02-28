@@ -31,12 +31,27 @@ void user_pwm_setvalue(TIM_HandleTypeDef *htim,uint16_t value)
 }
 
 
-void set_timer(TIM_HandleTypeDef* timer,unsigned short frequency)
+unsigned int set_timer(TIM_HandleTypeDef* timer,unsigned int frequency)
 {
+  unsigned short loopx;
+  unsigned short tmp_pres = 0;
+  for(loopx = 9; loopx <1000 ;loopx ++)
+  	{
+  		if(frequency < (1100/(loopx +1)))
+  			{
+  				continue;
+  			}
+		else
+			{
+				tmp_pres = loopx;
+        break;
+			}
+  	}
   unsigned int tmp_value;
-  tmp_value = (1000000/frequency);
+  tmp_value = ((72000000/(tmp_pres +1))/frequency);
   TIM_MasterConfigTypeDef sMasterConfig;
   TIM_OC_InitTypeDef sConfigOC;
+  timer->Init.Prescaler = tmp_pres;
   timer->Init.Period = tmp_value;
   if (HAL_TIM_PWM_Init(timer) != HAL_OK)
   {
@@ -61,7 +76,7 @@ void set_timer(TIM_HandleTypeDef* timer,unsigned short frequency)
 
 
   HAL_TIM_MspPostInit(timer);
-
+  return tmp_value;
 }	
 
 
@@ -140,13 +155,15 @@ void set_timer_3(unsigned short frequency)
 
 }
 
-unsigned short change_speed_2_freq(float speed)
+unsigned int change_speed_2_freq(float speed)
 {
 //10000  ->  226.98 '/s
 //44..065 -> 1'/s
-	unsigned short tmp_speed;
-	tmp_speed = (unsigned short)(speed * 44.056);
-	return tmp_speed;
+	//unsigned short tmp_speed;
+	//tmp_speed = (unsigned short)(speed * 44.056);
+	//return tmp_speed;
+
+return (unsigned int)speed;
 }
 
 unsigned int change_angle_2_freq_default(float angle)
@@ -168,7 +185,7 @@ unsigned int change_angle_2_freq_user(P_S_Motor_Info motor_info,float angle)
 
 void motor_run(P_S_Motor_Info motor_info)
 {
-	set_timer(motor_info->timer,change_speed_2_freq(motor_info->speed));	
+	motor_info->timer_value = set_timer(motor_info->timer,change_speed_2_freq(motor_info->speed));	
 	osDelay(1);
 	if(1 == motor_info->direction)
 		{
@@ -192,11 +209,11 @@ void motor_run(P_S_Motor_Info motor_info)
 				}
 			if(2 == motor_info ->motor_num)
 				{
-					SET_CCW2_1;
+					SET_CCW2_0;
 					SET_ENABLE_2_1;
 				}
 		}
-	user_pwm_setvalue(motor_info->timer,30);
+	user_pwm_setvalue(motor_info->timer,(motor_info->timer_value)/2);
 	HAL_TIM_Base_Start_IT(motor_info->timer);
 }
 
@@ -318,9 +335,9 @@ void adjust_motor(P_S_Motor_Info motor_info)
 	tick_start = HAL_GetTick();
 	motor_info->is_this_motor_adjusted = 0;
 	motor_info->adjust = 0;
-	operat_motor(0,220.0,24.0,motor_info);
+	operat_motor(0,8000.0,24.0,motor_info);
 	osDelay(500);
-	operat_motor(1,220.0,720.0,motor_info);//电机开始正转至限位处
+	operat_motor(1,8000.0,720.0,motor_info);//电机开始正转至限位处
 	
 	while((HAL_GetTick() - tick_start) < adjust_time)//规定时间内无法完成电机校准则认为电机失效
 		{
@@ -334,7 +351,7 @@ void adjust_motor(P_S_Motor_Info motor_info)
 							osDelay(1);
 							if(0 == motor_info->is_this_motor_adjusted)
 								{
-									operat_motor(0,220.0,720.0,motor_info);//电机开始反转,到限位处停止
+									operat_motor(0,1200.0,720.0,motor_info);//电机开始反转,到限位处停止
 									motor_info->is_this_motor_adjusted = 1;
 									motor_info->adjust = 0;
 									motor_info->finish_pulse = 0; 
@@ -360,7 +377,7 @@ void adjust_motor(P_S_Motor_Info motor_info)
 							osDelay(1);
 							if(0 == motor_info->is_this_motor_adjusted)
 								{
-									operat_motor(0,220.0,720.0,motor_info);//电机开始反转,到限位处停止
+									operat_motor(0,1200.0,720.0,motor_info);//电机开始反转,到限位处停止
 									motor_info->is_this_motor_adjusted = 1;
 									motor_info->adjust = 0;
 									motor_info->finish_pulse = 0; 

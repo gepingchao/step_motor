@@ -326,7 +326,7 @@ int recv(unsigned char sn, unsigned char * buf, unsigned short len)
    {
       recvsize = getSn_RX_RSR(sn);
       tmp = getSn_SR(sn);
-	 osDelay(5);
+	 osDelay(1);
       if (tmp != SOCK_ESTABLISHED)
       {
          if(tmp == SOCK_CLOSE_WAIT)

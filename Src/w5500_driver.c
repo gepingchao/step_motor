@@ -266,7 +266,7 @@ unsigned char start_tcp_server(unsigned int socket_num,unsigned int port)
 	save_task_info();
 	while(1)
 		{
-			osDelay(50);
+			osDelay(1);
 			socket_status = getSn_SR(num);
 
 			switch(socket_status)
@@ -496,7 +496,7 @@ unsigned char start_tcp_client(p_S_Client_Info client)
 	//unsigned int server_port;
 	while(1)
 		{
-			osDelay(50);
+			osDelay(1);
 			socket_status = getSn_SR(num);
 
 			switch(socket_status)
@@ -672,7 +672,7 @@ unsigned char start_udp_server(unsigned int socket_num,unsigned int port)
 	save_task_info();
 	while(1)
 		{
-			osDelay(20);
+			osDelay(1);
 			switch(getSn_SR(socket_num))
 				{
 				case SOCK_UDP :

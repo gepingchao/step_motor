@@ -122,7 +122,7 @@ void MX_FREERTOS_Init(void) {
   deal_keyHandle = osThreadCreate(osThread(deal_key), NULL);
 
   /* definition and creation of serial_server */
-  osThreadDef(serial_server, serial_server_task, osPriorityAboveNormal, 0, 128);
+  osThreadDef(serial_server, serial_server_task, osPriorityHigh, 0, 128);
   serial_serverHandle = osThreadCreate(osThread(serial_server), NULL);
 
   /* definition and creation of flash_server */
@@ -151,7 +151,7 @@ void MX_FREERTOS_Init(void) {
   flash_queueHandle = osMessageCreate(osMessageQ(flash_queue), NULL);
 
   /* definition and creation of motor_queue */
-  osMessageQDef(motor_queue, 16, uint32_t);
+  osMessageQDef(motor_queue, 8, uint32_t);
   motor_queueHandle = osMessageCreate(osMessageQ(motor_queue), NULL);
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -187,15 +187,15 @@ void sys_core_task(void const * argument)
   client_info.target_server.server_ip[0] = 192;
   client_info.target_server.server_ip[1] = 168;
   client_info.target_server.server_ip[2] = 1;
-  client_info.target_server.server_ip[3] = 207;
+  client_info.target_server.server_ip[3] = 199;
   client_info.target_server.server_port = 3333;
   client_info.this_client_socket_num = 2;
   tcp_client(&client_info);
   osDelay(200);
   adjust_motor(&motor_1_info);
-  operat_motor(1,220.0,360.0,&motor_1_info);
+  //operat_motor(1,200.0,360.0,&motor_1_info);
   adjust_motor(&motor_2_info);
-  operat_motor(1,220.0,360.0,&motor_2_info);
+  //operat_motor(1,200.0,360.0,&motor_2_info);
   
   /* Infinite loop */
   for(;;)
@@ -216,6 +216,7 @@ void read_key_task(void const * argument)
 	osDelay(20);
 	read_key();
 	get_current_angle(&motor_1_info);
+	get_current_angle(&motor_2_info);
   }
   /* USER CODE END read_key_task */
 }

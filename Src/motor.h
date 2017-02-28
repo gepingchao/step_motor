@@ -37,6 +37,8 @@ typedef struct
 	unsigned char posiation_lock;//位置锁   当转向更改时对位置加锁,消除间隙的脉冲不改变当前位置
 
 	TIM_HandleTypeDef* timer;
+
+	unsigned int timer_value;
 	
 	unsigned int adjust;
 	float speed;
@@ -63,7 +65,7 @@ extern S_Motor_Info motor_2_info;
 void user_pwm_setvalue(TIM_HandleTypeDef *htim,uint16_t value);
 void set_timer_2(unsigned short frequency);
 void set_timer_3(unsigned short frequency);
-void set_timer(TIM_HandleTypeDef* timer,unsigned short frequency);
+unsigned int set_timer(TIM_HandleTypeDef* timer,unsigned int frequency);
 void task_motor_server(unsigned char command);
 
 /////////////////////////////////////////////////////////////////////////////下面是可以调用的函数

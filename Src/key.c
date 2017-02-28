@@ -328,20 +328,20 @@ unsigned char deal_key_value(unsigned key_value)
 				
 			case(key3_press):
 				LED_TOG;
-				adjust_motor(&motor_1_info);
+				//adjust_motor(&motor_1_info);
 				//remove_gap(&motor_1_info,2.8);
-				operat_motor(1,1.0,10.0,&motor_1_info);
-				osDelay(10500);
-				operat_motor(1,10.0,80.0,&motor_1_info);
-				osDelay(8500);
-				operat_motor(1,30.0,90.0,&motor_1_info);
-				osDelay(4500);
-				operat_motor(1,90.0,90.0,&motor_1_info);
-				osDelay(2500);
-				operat_motor(1,180.0,90.0,&motor_1_info);
-				osDelay(1700);
+				operat_motor(1,100.0,10000.0,&motor_1_info);
+				osDelay(10000);
+				operat_motor(1,500.0,80000.0,&motor_1_info);
+				osDelay(12000);
+				operat_motor(1,1000.0,90000.0,&motor_1_info);
+				osDelay(14000);
+				operat_motor(1,1500.0,90000.0,&motor_1_info);
+				osDelay(16000);
+				operat_motor(1,8000.0,72000.0,&motor_1_info);
+				osDelay(1800);
 				adjust_motor(&motor_2_info);
-				operat_motor(1,220.0,360.0,&motor_2_info);
+				operat_motor(1,250.0,360.0,&motor_2_info);
 				//HAL_Delay(2000);
 				break;
 
