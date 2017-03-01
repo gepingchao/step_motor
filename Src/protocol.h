@@ -17,7 +17,9 @@ typedef enum
 	save_motor_end_posiation_info = 0X22,
 	delete_all_motor_posiation_info = 0X23,
 	polling_all_motor_posiation_info = 0X24,
-	polling_motor_rs485_info = 0X30
+	polling_motor_rs485_info = 0X30,
+
+	test_motor_driver= 0X88
 	
 }E_Motor_Ctrl_Command;
 

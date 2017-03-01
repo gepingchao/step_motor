@@ -41,7 +41,7 @@ typedef struct
 	unsigned int timer_value;
 	
 	unsigned int adjust;
-	float speed;
+	int speed;
 	float current_position;
 	float current_angle;
 	unsigned int distance;

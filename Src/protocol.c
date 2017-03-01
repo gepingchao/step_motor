@@ -106,6 +106,16 @@ void execute_protocol(P_S_Protocol_Info protocol_info)
 			case polling_motor_rs485_info:
 				break;
 
+			case test_motor_driver:
+				recv_parameter[0] = *(protocol_info->parameter);
+				recv_parameter[1] = *(protocol_info->parameter+1);
+				int_parameter = (((int)recv_parameter[0])<<8) + recv_parameter[1];
+				parameter = (float)int_parameter;
+				operat_motor(1,parameter,2000.0,&motor_1_info);
+				operat_motor(1,parameter,2000.0,&motor_2_info);
+				break;
+				
+
 
 
 			default :

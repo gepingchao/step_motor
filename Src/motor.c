@@ -25,7 +25,7 @@ void user_pwm_setvalue(TIM_HandleTypeDef *htim,uint16_t value)
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
     sConfigOC.Pulse = value;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+    sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
     HAL_TIM_PWM_ConfigChannel(htim, &sConfigOC, TIM_CHANNEL_1);
     HAL_TIM_PWM_Start(htim, TIM_CHANNEL_1);   
 }
@@ -35,7 +35,7 @@ unsigned int set_timer(TIM_HandleTypeDef* timer,unsigned int frequency)
 {
   unsigned short loopx;
   unsigned short tmp_pres = 0;
-  for(loopx = 9; loopx <1000 ;loopx ++)
+  for(loopx = 2; loopx <1000 ;loopx ++)
   	{
   		if(frequency < (1100/(loopx +1)))
   			{
@@ -185,7 +185,7 @@ unsigned int change_angle_2_freq_user(P_S_Motor_Info motor_info,float angle)
 
 void motor_run(P_S_Motor_Info motor_info)
 {
-	motor_info->timer_value = set_timer(motor_info->timer,change_speed_2_freq(motor_info->speed));	
+	motor_info->timer_value = set_timer(motor_info->timer,motor_info->speed);	
 	osDelay(1);
 	if(1 == motor_info->direction)
 		{
@@ -214,6 +214,7 @@ void motor_run(P_S_Motor_Info motor_info)
 				}
 		}
 	user_pwm_setvalue(motor_info->timer,(motor_info->timer_value)/2);
+	//user_pwm_setvalue(motor_info->timer,200);
 	HAL_TIM_Base_Start_IT(motor_info->timer);
 }
 
@@ -286,7 +287,7 @@ void init_motor_info(void)
 void operat_motor(unsigned char direction,float speed,float angle,P_S_Motor_Info motor_info)//direction 放向 speed速度单位度每秒angle角度单位度
 {
 	motor_info->direction = direction;
-	motor_info->speed = speed;
+	motor_info->speed = change_speed_2_freq(speed);
 	if(1 == motor_info->is_this_motor_adjusted)
 		{
 			motor_info->distance = change_angle_2_freq_user(motor_info,angle);
