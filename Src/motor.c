@@ -166,11 +166,26 @@ unsigned int change_speed_2_freq(float speed)
 return (unsigned int)speed;
 }
 
+
+
+/************
+GEAR_REDUCTION_RATIO  齿轮组减速比
+IC_REDUCTION_RATIO	驱动IC细分
+PLUSE_PER_CRICLE 步进电机转一圈使用的脉冲数 (360/步进角)
+根据使用的电机和减速器设置
+*****************************/
+
+#define GEAR_REDUCTION_RATIO 1
+#define IC_REDUCTION_RATIO 16
+#define PLUSE_PER_CRICLE 200
+
+
 unsigned int change_angle_2_freq_default(float angle)
 {
-	float reduction_ratio = GEAR_REDUCTION_RATIO * IC_REDUCTION_RATIO;
+	float reduction_ratio = GEAR_REDUCTION_RATIO * IC_REDUCTION_RATIO*PLUSE_PER_CRICLE;
 	unsigned int freq;
-	freq = (angle * reduction_ratio * 357) /(18*360);
+	//freq = (angle * reduction_ratio * 357) /(18*360);//如果需要软件校准
+	freq = (angle/360) * reduction_ratio;
 	return freq;
 }
 

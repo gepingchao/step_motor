@@ -2,14 +2,6 @@
 #define __MOTOR_H__
 #include "include.h"
 
-/************
-GEAR_REDUCTION_RATIO  齿轮组减速比
-IC_REDUCTION_RATIO	驱动IC细分
-*****************************/
-
-#define GEAR_REDUCTION_RATIO 100 
-#define IC_REDUCTION_RATIO 8
-
 
   typedef enum
   {

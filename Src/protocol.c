@@ -41,8 +41,8 @@ void pretreatment_protocol(unsigned char* protocol,P_S_Protocol_Info protocol_in
 
 void execute_protocol(P_S_Protocol_Info protocol_info)
 {
-	float parameter= 0.0;
-	int int_parameter = 0;
+	float parameter[5]= {0.0};
+	int int_parameter[5] = {0};
 	unsigned char recv_parameter[10]={0};
 	if((machine_info.this_machime_adress != protocol_info->address)&&(0XFF != protocol_info->address))
 		{
@@ -73,19 +73,19 @@ void execute_protocol(P_S_Protocol_Info protocol_info)
 			case motor1_goto_angle:
 				recv_parameter[0] = *(protocol_info->parameter);
 				recv_parameter[1] = *(protocol_info->parameter+1);
-				int_parameter = (((int)recv_parameter[0])<<8) + recv_parameter[1];
-				parameter = (float)int_parameter;
-				parameter = parameter/10;
-				motor_goto_angle(&motor_1_info,parameter);
+				int_parameter[0] = (((int)recv_parameter[0])<<8) + recv_parameter[1];
+				parameter[0] = (float)int_parameter[0];
+				parameter[0] = parameter[0]/10;
+				motor_goto_angle(&motor_1_info,parameter[0]);
 				break;
 
 			case motor2_goto_angle:
 				recv_parameter[0] = *(protocol_info->parameter);
 				recv_parameter[1] = *(protocol_info->parameter+1);
-				int_parameter = (((int)recv_parameter[0])<<8) + recv_parameter[1];
-				parameter = (float)int_parameter;
-				parameter = parameter/10;
-				motor_goto_angle(&motor_2_info,parameter);
+				int_parameter[0] = (((int)recv_parameter[0])<<8) + recv_parameter[1];
+				parameter[0] = (float)int_parameter[0];
+				parameter[0] = parameter[0]/10;
+				motor_goto_angle(&motor_2_info,parameter[0]);
 				break;
 
 			case motor_goto_posiation:
@@ -109,10 +109,16 @@ void execute_protocol(P_S_Protocol_Info protocol_info)
 			case test_motor_driver:
 				recv_parameter[0] = *(protocol_info->parameter);
 				recv_parameter[1] = *(protocol_info->parameter+1);
-				int_parameter = (((int)recv_parameter[0])<<8) + recv_parameter[1];
-				parameter = (float)int_parameter;
-				operat_motor(1,parameter,2000.0,&motor_1_info);
-				operat_motor(1,parameter,2000.0,&motor_2_info);
+				recv_parameter[2] = *(protocol_info->parameter+2);
+				recv_parameter[3] = *(protocol_info->parameter+3);
+				recv_parameter[4] = *(protocol_info->parameter+4);
+				int_parameter[0] = (((int)recv_parameter[0])<<16)+(((int)recv_parameter[1])<<8) + recv_parameter[2];
+				int_parameter[1] = (((int)recv_parameter[3])<<8) + recv_parameter[4];
+				parameter[0] = (float)int_parameter[0];
+				parameter[1] = (float)int_parameter[1];
+				parameter[1] = parameter[1]/10;
+				operat_motor(1,parameter[0],parameter[1],&motor_1_info);
+				operat_motor(1,parameter[0],parameter[1],&motor_2_info);
 				break;
 				
 
